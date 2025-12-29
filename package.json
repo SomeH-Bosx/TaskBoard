@@ -1,3 +1,4 @@
+
 {
   "name": "task-board",
   "private": true,
@@ -18,8 +19,7 @@
     "vue": "^3.5.24",
     "vue-chartjs": "^3.1.1",
     "vue-router": "^4.6.4",
-    "vuedraggable": "^4.1.0",
-    "yarn": "^1.22.22"
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
