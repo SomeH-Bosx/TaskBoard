@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== 全局基础 ========== */
+:root{
+  /* 如果你在 tailwind.config.js 定义了 primary，这里不用改；下面颜色仅为保险替代 */
+  --color-primary: #2563EB;     /* blue-600 */
+  --color-primary-dark: #1D4ED8;/* blue-700 */
+  --color-surface: #F8FAFC;     /* page background */
+  --color-card-shadow: rgba(16,24,40,0.06);
+}
+
+/* 全局 body 背景与文本颜色 */
+body {
+  background-color: var(--color-surface);
+  color: theme('colors.slate.900', #0f172a); /* 兼容 tailwind 变量（回退） */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 容器 */
+.app-container {
+  @apply max-w-7xl mx-auto px-6 py-8;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* ========== 表单、按钮、徽章 ========== */
+.input {
+  @apply w-full border border-slate-200 rounded-md px-3 py-2 bg-white transition;
+  background-color: #fff;
+  border-color: rgba(15,23,42,0.06);
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+.input:focus {
+  outline: none;
+  /* 使用 box-shadow 模拟 ring */
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+  border-color: rgba(37,99,235,0.4);
+}
+
+/* 基础按钮样式（不在 @apply 中写变体） */
+.btn {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg text-white shadow-sm transition;
+  background-color: var(--color-primary);
+  border: none;
+  cursor: pointer;
+  transform: translateZ(0);
+  transition: background-color 150ms ease, transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+}
+.btn:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(0);
+  opacity: 0.95;
+}
+
+/* 细小变体按钮 */
+.btn-detail {
+  @apply inline-flex items-center gap-2 px-3 py-1 rounded-lg text-sm bg-white border border-slate-100 shadow-sm transition;
+  background-color: #fff;
+  border-color: rgba(15,23,42,0.06);
+}
+.btn-detail:hover {
+  background-color: rgba(37,99,235,0.06); /* 近似 bg-primary/6 */
+  transform: translateX(2px);
+}
+.btn-detail:active {
+  transform: translateX(0);
+  opacity: 0.95;
+}
+
+/* 仪表徽章 */
+.badge {
+  @apply inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium;
+  background-color: rgba(37,99,235,0.08); /* primary/10 */
+  color: var(--color-primary);
+}
+
+/* ========== 卡片 / 布局 ========== */
+/* 基础卡片，hover 交互单独写选择器 */
+.card {
+  @apply bg-white rounded-2xl p-4 shadow-card transition;
+  background-color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px var(--color-card-shadow);
+  transition: box-shadow 180ms ease, transform 160ms ease;
+}
+.card:hover {
+  box-shadow: 0 18px 40px rgba(16,24,40,0.12);
+  transform: translateY(-6px);
+}
+
+/* 列头 */
+.col-header {
+  @apply text-sm font-semibold mb-3 flex items-center justify-between;
+}
+
+/* 模态 */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black/30 flex items-center justify-center z-50;
+  background: rgba(0,0,0,0.28);
+}
+.modal-panel {
+  @apply bg-white rounded-2xl p-6 w-full max-w-lg shadow-xl transform transition;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* 使 modal 在需要时略微放大：用类名控制（在 JS 中切换 class） */
+.modal-panel.scale-105 {
+  transform: scale(1.02);
+}
+
+/* ========== 任务进度 / 计时 ========== */
+.countbar {
+  @apply h-2 rounded-full bg-slate-200 overflow-hidden;
+  height: 10px;
+  background-color: rgba(229,231,235,1);
+  border-radius: 999px;
+}
+.countbar > i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+  border-radius: 999px;
+  transition: width 600ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* ========== 拖拽视觉 ========== */
+.drag-ghost {
+  opacity: 0.6;
+  transform: scale(0.98);
+}
+.drag-chosen {
+  box-shadow: 0 20px 40px rgba(16,24,40,0.18);
+  transform: translateY(-4px);
+}
+
+/* ========== 小动画 & 浮动卡片 ========== */
+@keyframes floaty {
+  0% { transform: translateY(0) }
+  50% { transform: translateY(-6px) }
+  100% { transform: translateY(0) }
+}
+.floating-card {
+  animation: floaty 4s ease-in-out infinite;
+}
+
+/* modal 过渡微调（复写 tailwind 的 transition） */
+.modal-panel {
+  will-change: transform, opacity;
+}
+
+/* ========== 响应式微调 ========== */
+@media (max-width: 900px) {
+  .app-container { padding-left: 1rem; padding-right: 1rem; }
+  .floating-card { display: none; }
+}
+
+/* ========== 兼容性提示：不要在此文件再使用 @apply 带变体语法 ========== */
+/* 示例（错误写法 - 请不要使用）：
+   .btn { @apply hover:(bg-primary-600 translate-y-0.5); }
+   这样的写法会触发 postcss/tailwind 报错。
+   交互样式请像上面一样使用 :hover/:active/.class 选择器来实现。
+*/
